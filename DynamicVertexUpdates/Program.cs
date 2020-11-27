@@ -8,10 +8,8 @@
     class Program
     {
         //From Keys in portal...
-        //static string endpoint = "<.NET SDK URI>";
-        //static string authKey = "<PRIMARY KEY>";
-        static string endpoint = "https://tvk-gremlin.documents.azure.com:443/";
-        static string authKey = "4roIdp6XbDln4ZXEnHshYLmnzvjIIDWeYHtZbe824VoJmisxBRJyhn8tiFt0wGWFnH2kgKxhn7QrfYQiv1JIWQ==";
+        static string endpoint = "<.NET SDK URI>";
+        static string authKey = "<PRIMARY KEY>";
         static CosmosClient client = new CosmosClient(endpoint, authKey);
         Container container = client.GetContainer("graphdb", "graph");
 
