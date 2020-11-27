@@ -8,8 +8,10 @@
     class Program
     {
         //From Keys in portal...
-        static string endpoint = "<.NET SDK URI>";
-        static string authKey = "<PRIMARY KEY>";
+        //static string endpoint = "<.NET SDK URI>";
+        //static string authKey = "<PRIMARY KEY>";
+        static string endpoint = "https://tvk-gremlin.documents.azure.com:443/";
+        static string authKey = "4roIdp6XbDln4ZXEnHshYLmnzvjIIDWeYHtZbe824VoJmisxBRJyhn8tiFt0wGWFnH2kgKxhn7QrfYQiv1JIWQ==";
         static CosmosClient client = new CosmosClient(endpoint, authKey);
         Container container = client.GetContainer("graphdb", "graph");
 
@@ -68,19 +70,19 @@
                 }
                 else if (element.Key.Contains("properties"))
                 {
-                    JObject properties = new JObject(JsonConvert.DeserializeObject<dynamic>(element.Value.ToString()));
-                    foreach (var prop in properties)
+                    foreach (var prop in new JObject(JsonConvert.DeserializeObject<dynamic>(element.Value.ToString())))
                     {
                         // for each property in the source json structure, we dynamically create the Gremlin property structure required by 
                         // the SQL API backed Gremlin implementation in Azure Cosmos DB, and preserve any existing properties
-                        dynamic val = new JObject(JsonConvert.DeserializeObject<dynamic>(prop.Value.ToString()));
                         JArray newPropArray = new JArray();
                         JObject newProp = new JObject();
                         Guid id = Guid.NewGuid();
-                        newProp.Add("id", id);
-                        newProp.Add("_value", val.value);                        
+                        newProp.Add("id", id); 
+                        newProp.Add("_value", prop.Value["value"]);
                         newPropArray.Add(newProp);
                         upsertGraphObject[prop.Key] = newPropArray;
+
+                        //TODO - add meta-properties as required
                     }
                 }
             }
